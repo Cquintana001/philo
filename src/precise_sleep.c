@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 12:46:45 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/13 13:50:51 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/13 15:21:36 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,9 @@ static long    get_time(void)
 }
 
  
-void precise_sleep(int milliseconds)
+void ft_precise_sleep(int milliseconds)
 {
     long start_time;
-	int x;
 	long curr_time;
  
     start_time = get_time();

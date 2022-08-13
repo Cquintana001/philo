@@ -6,15 +6,14 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 10:49:09 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/13 13:46:35 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/13 15:21:41 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- 
 #include "precise_sleep.h"
  
 int main(void)
 {
-    precise_sleep(200);
+    ft_precise_sleep(200);
 	return (0);
 }
