@@ -6,12 +6,13 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 12:13:55 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/15 12:21:48 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/16 13:11:03 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "check_error.h"
+#include <stdlib.h>
 
 void check_error(int argc)
 {

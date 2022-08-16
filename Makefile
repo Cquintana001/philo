@@ -7,6 +7,7 @@ CFLAGS 				= 	-Wall -Werror -Wextra
 SRC_DIR				=	src
 SOURCES				=	$(SRC_DIR)/precise_sleep.c \
 						$(SRC_DIR)/philo.c \
+						$(SRC_DIR)/check_error.c \
 
 OBJS				= 	$(SOURCES:.c=.o)
 
