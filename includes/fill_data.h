@@ -1,28 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   struct.h                                           :+:      :+:    :+:   */
+/*   fill_data.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/15 11:51:34 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/17 14:05:28 by caquinta         ###   ########.fr       */
+/*   Created: 2022/08/17 15:02:40 by caquinta          #+#    #+#             */
+/*   Updated: 2022/08/17 15:03:16 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRUCT_H
-# define STRUCT_H
+#ifndef FILL_DATA_H
+# define FILL_DATA_H
 
-typedef struct s_philo{
-	
-	int nbr_philo;
-	int time_to_die;
-	int time_to_eat;
-	int time_to_sleep;
-	int thinking;
-	 
-	int fork;
-	int *fork2;
-} t_philo;
+t_philo *fill_data( char *x, char *i,char *j, char *h);
 
 #endif

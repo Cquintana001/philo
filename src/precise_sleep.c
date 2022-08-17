@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 12:46:45 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/13 15:21:36 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/17 14:34:19 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <sys/time.h>
 
  
-static long    get_time(void)
+long    get_time(void)
 {
     struct timeval  tp;
     long            milliseconds;

@@ -1,14 +1,14 @@
 NAME				=	philo
 
-libft				= 	Libft
+libft				= 	libft
 INC_DIR				= 	./includes/
 CC 					= 	gcc
-CFLAGS 				= 	-Wall -Werror -Wextra
+CFLAGS 				= 	-Wall -Werror -Wextra  
 SRC_DIR				=	src
 SOURCES				=	$(SRC_DIR)/precise_sleep.c \
 						$(SRC_DIR)/philo.c \
 						$(SRC_DIR)/check_error.c \
-
+						$(SRC_DIR)/fill_data.c 
 OBJS				= 	$(SOURCES:.c=.o)
 
 
