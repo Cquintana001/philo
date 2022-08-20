@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 12:46:45 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/17 14:34:19 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/20 10:02:59 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/time.h>
-
+#include <stdlib.h>
  
 long    get_time(void)
 {
@@ -27,8 +27,30 @@ long    get_time(void)
     return (milliseconds);
 }
 
- 
-void ft_precise_sleep(int milliseconds)
+
+
+long ft_precise_sleep(int milliseconds, long h_die, int index)
+{
+     
+    long start_time;
+    start_time = get_time();
+     
+    while (get_time() - start_time < milliseconds)
+    {
+        
+        if(get_time()  > h_die)
+        {
+            printf("%ld %d has died\n", get_time(), index);
+            exit(0);
+        }
+       
+    	usleep(1 * 1500);		 
+  
+    } 
+    return(start_time = get_time());	 
+}
+
+/* void ft_precise_sleep(int milliseconds)
 {
     long start_time;
 	long curr_time;
@@ -45,4 +67,4 @@ void ft_precise_sleep(int milliseconds)
 				curr_time = get_time();
 			} 
     }
-}
+} */
