@@ -41,7 +41,8 @@ void *philo_state(void *arg)
 			printf("%ld %d is eating\n",get_time(), philosopher->nbr_philo);
 			ft_precise_sleep(philosopher->time_to_eat,philosopher->hour_to_die, philosopher->nbr_philo);			 
 			 pthread_mutex_lock(&philosopher->fork_locks);
-			philosopher->eat +=1;		 
+			philosopher->eat +=1;
+			find_min(philosopher, philosopher->eat_limit);		 
 			*(philosopher->fork2)= 0;
 			philosopher->fork = 0;
 			pthread_mutex_unlock(&philosopher->fork_locks);
