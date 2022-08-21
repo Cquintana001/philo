@@ -8,7 +8,8 @@ SRC_DIR				=	src
 SOURCES				=	$(SRC_DIR)/precise_sleep.c \
 						$(SRC_DIR)/philo.c \
 						$(SRC_DIR)/check_error.c \
-						$(SRC_DIR)/fill_data.c 
+						$(SRC_DIR)/fill_data.c \
+						$(SRC_DIR)/find_min.c 
 OBJS				= 	$(SOURCES:.c=.o)
 
 

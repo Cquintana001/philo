@@ -19,40 +19,29 @@
 #include <stdlib.h>
 #include "fill_data.h"
 #include <unistd.h>
+#include "find_min.h" 
   
- /* void *is_eating(t_philo *philo)
-{
-	*(philo->fork2)= 1;
-		philo->fork = 1;
-		pthread_mutex_unlock(&fork_locks);
-		printf("%d is eating\n", philo->nbr_philo);
-		ft_precise_sleep(philo->time_to_eat);
-		*(philo->fork2)= 0;
-		philo->fork = 0;
-		  
-		return 0;
-}  */
 
 void *philo_state(void *arg)
 {	 
 	t_philo *philosopher = (t_philo*)arg;
 	 pthread_mutex_unlock(&philosopher->fork_locks);
-	 
 	  while(1)
 	 {
 	 
-	 	if(*(philosopher->fork2)==0 && philosopher->fork == 0)				 
+	 	if(philosopher->fork2 != NULL && *(philosopher->fork2)==0 && philosopher->fork == 0 )				 
 		{	
-	 		 pthread_mutex_lock(&philosopher->fork_locks);
+	 		pthread_mutex_lock(&philosopher->fork_locks);
 			*(philosopher->fork2)= 1;
 			philosopher->fork = 1;
-			pthread_mutex_unlock(&philosopher->fork_locks);
 			printf("%ld %d has taken a fork\n",get_time(), philosopher->nbr_philo);
+
 			philosopher->hour_to_die = get_time() + philosopher->time_to_die;
-			 		 
+			pthread_mutex_unlock(&philosopher->fork_locks);
 			printf("%ld %d is eating\n",get_time(), philosopher->nbr_philo);
-			ft_precise_sleep(philosopher->time_to_eat,philosopher->hour_to_die, philosopher->nbr_philo); 
-		 pthread_mutex_lock(&philosopher->fork_locks);
+			ft_precise_sleep(philosopher->time_to_eat,philosopher->hour_to_die, philosopher->nbr_philo);			 
+			 pthread_mutex_lock(&philosopher->fork_locks);
+			philosopher->eat +=1;		 
 			*(philosopher->fork2)= 0;
 			philosopher->fork = 0;
 			pthread_mutex_unlock(&philosopher->fork_locks);
@@ -63,11 +52,12 @@ void *philo_state(void *arg)
 		{	
 			 
 			printf("%ld %d is thinking\n",get_time(), philosopher->nbr_philo);
-		 	while(*(philosopher->fork2)==1 || philosopher->fork == 1)
+		 	while(philosopher->fork2 == NULL|| *(philosopher->fork2)==1 || philosopher->fork == 1)
 			{ 
-				if(get_time()>philosopher->hour_to_die)
+				if(get_time()>philosopher->hour_to_die )
         		{
-            		printf("%ld %d has died\n", get_time(), philosopher->nbr_philo);
+            		printf("%ld %d has died after %d dinners\n", get_time(), philosopher->nbr_philo, philosopher->eat);
+
             		exit(0);
         		}
 			}
@@ -89,10 +79,17 @@ int main(int argc, char *argv[])
 	int x = 0;
 	int a =ft_atoi(argv[1]);
 	pthread_mutex_t fork_locks = PTHREAD_MUTEX_INITIALIZER;	
-	pthread_mutex_init(&fork_locks, NULL);
- 
+	pthread_mutex_init(&fork_locks, NULL); 
 	check_error(argc);
 	philos = fill_data(argv[1],argv[2],argv[3],argv[4], &fork_locks);
+	if(argv[5])
+	{	x = ft_atoi(argv[5]);
+	}
+	else
+		x = -1;
+	philos = fill_data_second(philos,a,x);	 
+	printf("x es %d\n", philos->eat_limit);
+		x = 0;
 	pthread_t threads[a];
 	while(x<a)
 	{
@@ -102,8 +99,7 @@ int main(int argc, char *argv[])
 		 
 		philos++; 
 		x++;
-		pthread_mutex_unlock(&fork_locks);
-		//pthread_mutex_unlock(&fork_locks);	 
+		pthread_mutex_unlock(&fork_locks); 
 	}
 	x = 0;
 	  
@@ -112,8 +108,6 @@ int main(int argc, char *argv[])
 		pthread_join(threads[x], NULL);
 		x++;
 	}
- 
-	//pthread_mutex_destroy(&fork_locks);
 
 	return (0);
 }
