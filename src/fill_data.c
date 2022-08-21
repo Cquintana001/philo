@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 14:59:42 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/20 15:03:38 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/21 07:59:11 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 #include <stdlib.h>
 #include "../libft/libft.h"
 #include "precise_sleep.h"
+#include <pthread.h>
 
-t_philo *fill_data( char *x, char *i,char *j, char *h)
+t_philo *fill_data( char *x, char *i,char *j, char *h, pthread_mutex_t *m)
 {
 	t_philo *philos;
 	int f;
@@ -30,8 +31,10 @@ t_philo *fill_data( char *x, char *i,char *j, char *h)
 		philos[f].time_to_eat = ft_atoi(j);
 		philos[f].time_to_sleep =  ft_atoi(h);
 		philos[f].fork = 0;
-		 
-		  if(f==0)
+		philos[f].fork_locks =  *m;
+		if(f==0 && *x == '1')
+			philos[f].fork2 =  NULL;
+		else if(f==0 )
 			philos[f].fork2 =  &philos[ft_atoi(x) - 1].fork;
 		else
 			philos[f].fork2 = &philos[f - 1].fork;
