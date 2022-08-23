@@ -20,50 +20,54 @@
 #include "fill_data.h"
 #include <unistd.h>
 #include "find_min.h" 
-  
-
+   
+void print_function(t_philo *philos)
+{
+	int x = 0;
+	int i = philos[0].table->nbr_of_philos;
+	printf("valor de i %d\n", i);
+	printf("time to die %d\n", philos[0].table->time_to_die);
+	while(x<i)
+	{	
+		printf("nbr_philos es %d\n", philos[x].table->nbr_of_philos);
+		printf("time_to_die es %d\n", philos[x].table->time_to_die);
+		printf("time_to_eat es %d\n", philos[x].table->time_to_eat); 
+		printf("time_to_sleep es %d\n", philos[x].table->time_to_sleep);
+		printf("eat_limit es %d\n", philos[x].table->eat_limit);
+		printf("index es %d\n", philos[x].nbr);
+		printf("fork es %p\n", philos[x].fork);
+		printf("fork2 es %p\n", philos[x].fork2);
+		printf("eat es %d\n", philos[x].eat);
+		printf("hour_to_die es %ld\n", philos[x].hour_to_die);
+		printf("\n\n\n");
+		 
+		x++;
+	}	
+} 
 void *philo_state(void *arg)
 {	 
-	t_philo *philosopher = (t_philo*)arg;
-	 pthread_mutex_unlock(&philosopher->fork_locks);
+	t_philo philo = *(t_philo*) arg;
+	  	  
 	  while(1)
-	 {
-	 
-	 	if(philosopher->fork2 != NULL && *(philosopher->fork2)==0 && philosopher->fork == 0 )				 
-		{	
-	 		pthread_mutex_lock(&philosopher->fork_locks);
-			*(philosopher->fork2)= 1;
-			philosopher->fork = 1;
-			printf("%ld %d has taken a fork\n",get_time(), philosopher->nbr_philo);
-
-			philosopher->hour_to_die = get_time() + philosopher->time_to_die;
-			pthread_mutex_unlock(&philosopher->fork_locks);
-			printf("%ld %d is eating\n",get_time(), philosopher->nbr_philo);
-			ft_precise_sleep(philosopher->time_to_eat,philosopher->hour_to_die, philosopher->nbr_philo);			 
-			 pthread_mutex_lock(&philosopher->fork_locks);
-			philosopher->eat +=1;
-			find_min(philosopher, philosopher->eat_limit);		 
-			*(philosopher->fork2)= 0;
-			philosopher->fork = 0;
-			pthread_mutex_unlock(&philosopher->fork_locks);
-			printf("%ld %d is sleeping\n",get_time(), philosopher->nbr_philo);
-			ft_precise_sleep(philosopher->time_to_sleep,philosopher->hour_to_die,philosopher->nbr_philo);
-		}
-		else
-		{	
-			 
-			printf("%ld %d is thinking\n",get_time(), philosopher->nbr_philo);
-		 	while(philosopher->fork2 == NULL|| *(philosopher->fork2)==1 || philosopher->fork == 1)
-			{ 
-				if(get_time()>philosopher->hour_to_die )
-        		{
-            		printf("%ld %d has died after %d dinners\n", get_time(), philosopher->nbr_philo, philosopher->eat);
-
-            		exit(0);
-        		}
-			}
-		}	 	
-	}  
+	 {	 
+  		pthread_mutex_lock(philo.fork);
+		pthread_mutex_lock(philo.fork2);
+			if(get_time()>philo.hour_to_die )
+        	{
+        		printf("%ld %d has died after %d dinners\n", get_time(), philo.nbr, philo.eat);
+        		exit(0);
+        	}
+		philo.hour_to_die = get_time() + philo.table->time_to_die;
+		philo.eat = philo.eat +1;
+		printf("%ld %d has taken a fork\n",get_time(), philo.nbr);
+		printf("%ld %d is eating his %d dinner\n",get_time(), philo.nbr, philo.eat);
+		ft_precise_sleep(philo.table->time_to_eat,philo.hour_to_die, philo.nbr);
+		pthread_mutex_unlock(philo.fork);
+		pthread_mutex_unlock(philo.fork2);		 
+		printf("%ld %d is sleeping\n",get_time(), philo.nbr);
+		ft_precise_sleep(philo.table->time_to_sleep,philo.hour_to_die,philo.nbr);
+		printf("%ld %d is thinking\n",get_time(), philo.nbr);	  	
+		}  
 	return 0;
 }
 
@@ -76,39 +80,32 @@ void *philo_state(void *arg)
 
 int main(int argc, char *argv[])
 {
-	t_philo *philos;
+	t_philo *global;
 	int x = 0;
 	int a =ft_atoi(argv[1]);
-	pthread_mutex_t fork_locks = PTHREAD_MUTEX_INITIALIZER;	
-	pthread_mutex_init(&fork_locks, NULL); 
-	check_error(argc);
-	philos = fill_data(argv[1],argv[2],argv[3],argv[4], &fork_locks);
-	if(argv[5])
-	{	x = ft_atoi(argv[5]);
+	pthread_mutex_t fork_locks[a];/* = PTHREAD_MUTEX_INITIALIZER; */	
+	while(x<a)
+	{
+		pthread_mutex_init(&fork_locks[x], NULL); 
+		x++;
 	}
-	else
-		x = -1;
-	philos = fill_data_second(philos,a,x);	 
-	printf("x es %d\n", philos->eat_limit);
+	check_error(argc);
+	t_table table = fill_table(argv);
+	global = fill_philo(&table, fork_locks);
+	//print_function(global);
 		x = 0;
 	pthread_t threads[a];
 	while(x<a)
-	{
-		  
-		pthread_mutex_lock(&fork_locks);
-		pthread_create(&threads[x], NULL, &philo_state, philos);
-		 
-		philos++; 
+	{		  	 
+		pthread_create(&threads[x], NULL, &philo_state, global);
+		global++;
 		x++;
-		pthread_mutex_unlock(&fork_locks); 
 	}
-	x = 0;
-	  
+	x = 0;	  
 	while(x<a)
 	{
 		pthread_join(threads[x], NULL);
 		x++;
 	}
-
 	return (0);
 }

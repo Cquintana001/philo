@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 14:59:42 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/21 12:08:41 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/23 11:57:52 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,47 +16,45 @@
 #include "../libft/libft.h"
 #include "precise_sleep.h"
 #include <pthread.h>
+#include <stdio.h>
+ 
+t_table fill_table( char *args[])
+{
+	t_table table;
 
-t_philo *fill_data( char *x, char *i,char *j, char *h, pthread_mutex_t *m)
+		table.nbr_of_philos = ft_atoi(args[1]);
+		table.time_to_die = ft_atoi(args[2]);
+		 
+		table.time_to_eat = ft_atoi(args[3]);
+		table.time_to_sleep =  ft_atoi(args[4]);
+		if(args[5])
+			table.eat_limit = ft_atoi(args[5]);
+		else
+			table.eat_limit = -1;
+ 
+	return(table);	
+}
+
+t_philo *fill_philo(t_table *table, pthread_mutex_t *m )
 {
 	t_philo *philos;
-	int f;
-	
-	f= 0;
-	philos =(t_philo*) malloc((sizeof(t_philo)* ft_atoi(x) + 1));
-	while(f<ft_atoi(x))
-	{	
-		philos[f].nbr_philo = f;
-		philos[f].time_to_die = ft_atoi(i);
-		philos[f].hour_to_die =   get_time() + philos[f].time_to_die;
-		philos[f].time_to_eat = ft_atoi(j);
-		philos[f].time_to_sleep =  ft_atoi(h);
-		philos[f].fork = 0;
-		philos[f].fork_locks =  *m;
-		if(f==0 && ft_atoi(x) == 1)
-			philos[f].fork2 =  NULL;
-		else if(f==0 )
-			philos[f].fork2 =  &philos[ft_atoi(x) - 1].fork;
-		else
-			philos[f].fork2 = &philos[f - 1].fork;
-		f++;
-	}
-	return(philos);	
-}
-
-t_philo *fill_data_second(t_philo *philos, int index, int limit)
-{
-	t_philo *aux;
+	philos =(t_philo*) malloc((sizeof(t_philo)*  table->nbr_of_philos + 1));
 	int x;
 
-	x = 0;
-	aux= philos;
-		while(x<index)
+	x = 0;	 
+		while(x<table->nbr_of_philos)
 		{	
-			aux->index = index;
-			aux->eat = 0;
-			aux->eat_limit = limit; 
+			philos[x].nbr = x;
+			philos[x].eat = 0;
+			philos[x].hour_to_die =   get_time() + table->time_to_die;
+			philos[x].table = table;
+			philos[x].fork = &m[x];
+			if(table->nbr_of_philos ==1)
+				philos[x].fork2= NULL;
+			else
+				philos[x].fork2= &m[(x+1)%table->nbr_of_philos];
 			x++;
 		}
-	return(aux);
+		return(philos);
 }
+	 

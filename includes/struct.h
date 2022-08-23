@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 11:51:34 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/21 11:05:57 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/23 09:56:03 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,25 @@
 
 #include <pthread.h>
 
-typedef struct s_philo{
+
+typedef struct s_table{
 	
-	int index;
-	int nbr_philo;
+	int nbr_of_philos;
 	int time_to_die;
-	long hour_to_die;
 	int time_to_eat;
 	int time_to_sleep;
-	int eat_limit;
+	int eat_limit;	
+}t_table;
+typedef struct s_philo{
+	
+	int nbr;
+	long hour_to_die;	 
 	int eat;
-	pthread_mutex_t fork_locks;
-	int fork;
-	int *fork2;
+	t_table *table;
+	pthread_mutex_t *fork;
+	pthread_mutex_t *fork2;
 } t_philo;
 
  
+
 #endif
