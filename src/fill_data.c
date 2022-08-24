@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 14:59:42 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/23 11:57:52 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/24 12:13:53 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_table fill_table( char *args[])
 	return(table);	
 }
 
-t_philo *fill_philo(t_table *table, pthread_mutex_t *m )
+t_philo *fill_philo(t_table *table, pthread_mutex_t *m, int *is_dead, pthread_mutex_t *w )
 {
 	t_philo *philos;
 	philos =(t_philo*) malloc((sizeof(t_philo)*  table->nbr_of_philos + 1));
@@ -44,15 +44,20 @@ t_philo *fill_philo(t_table *table, pthread_mutex_t *m )
 	x = 0;	 
 		while(x<table->nbr_of_philos)
 		{	
+			philos[x].write = w;
+			philos[x].is_dead = is_dead;
 			philos[x].nbr = x;
 			philos[x].eat = 0;
 			philos[x].hour_to_die =   get_time() + table->time_to_die;
 			philos[x].table = table;
+			philos[x].philo_fork = 0;
 			philos[x].fork = &m[x];
 			if(table->nbr_of_philos ==1)
 				philos[x].fork2= NULL;
 			else
-				philos[x].fork2= &m[(x+1)%table->nbr_of_philos];
+			{	philos[x].fork2= &m[(x+1)%table->nbr_of_philos];
+				philos[x].philo_fork2 = &philos[(x+1)%table->nbr_of_philos].philo_fork;
+			}
 			x++;
 		}
 		return(philos);

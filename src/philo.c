@@ -39,6 +39,7 @@ void print_function(t_philo *philos)
 		printf("fork2 es %p\n", philos[x].fork2);
 		printf("eat es %d\n", philos[x].eat);
 		printf("hour_to_die es %ld\n", philos[x].hour_to_die);
+		printf("is_dead es %p\n", philos[x].is_dead);
 		printf("\n\n\n");
 		 
 		x++;
@@ -46,27 +47,52 @@ void print_function(t_philo *philos)
 } 
 void *philo_state(void *arg)
 {	 
-	t_philo philo = *(t_philo*) arg;
-	  	  
+	t_philo *philo = (t_philo*) arg;
+	  
 	  while(1)
 	 {	 
-  		pthread_mutex_lock(philo.fork);
-		pthread_mutex_lock(philo.fork2);
-			if(get_time()>philo.hour_to_die )
-        	{
-        		printf("%ld %d has died after %d dinners\n", get_time(), philo.nbr, philo.eat);
-        		exit(0);
-        	}
-		philo.hour_to_die = get_time() + philo.table->time_to_die;
-		philo.eat = philo.eat +1;
-		printf("%ld %d has taken a fork\n",get_time(), philo.nbr);
-		printf("%ld %d is eating his %d dinner\n",get_time(), philo.nbr, philo.eat);
-		ft_precise_sleep(philo.table->time_to_eat,philo.hour_to_die, philo.nbr);
-		pthread_mutex_unlock(philo.fork);
-		pthread_mutex_unlock(philo.fork2);		 
-		printf("%ld %d is sleeping\n",get_time(), philo.nbr);
-		ft_precise_sleep(philo.table->time_to_sleep,philo.hour_to_die,philo.nbr);
-		printf("%ld %d is thinking\n",get_time(), philo.nbr);	  	
+		 
+		while(philo->philo_fork ==0)
+		{
+			
+			pthread_mutex_lock(philo->fork);
+			philo->philo_fork =1;
+			if(*(philo->philo_fork2) == 0)
+			{	pthread_mutex_lock(philo->fork2);
+				*(philo->philo_fork2) = 1;
+			}
+			else
+			{	
+				philo->philo_fork =0;
+				pthread_mutex_unlock(philo->fork);
+			}
+		if((get_time()>philo->hour_to_die)|| (*(philo->is_dead) > 0) )
+        {	
+			if(*(philo->is_dead) == 0)
+			{	
+				*(philo->is_dead) = 1;
+			 
+				printf("%ld %d has died1\n", get_time(), philo->nbr);
+				printf("philo_is_dead vale : %d\n", *(philo->is_dead));
+			}			 	 
+			pthread_mutex_unlock(philo->fork);
+			pthread_mutex_unlock(philo->fork2);	 
+        	return(0);
+        }
+		}
+		 
+		if(*(philo->is_dead) > 0|| !is_eating(philo))
+			return(0);
+	
+  		pthread_mutex_unlock(philo->fork);
+		pthread_mutex_unlock(philo->fork2);
+		  
+		 
+		if(!is_sleeping(philo)|| *(philo->is_dead) >0)
+			return(0);
+ 
+		printf("%ld %d is thinking\n",get_time(), philo->nbr);
+  	
 		}  
 	return 0;
 }
@@ -83,7 +109,12 @@ int main(int argc, char *argv[])
 	t_philo *global;
 	int x = 0;
 	int a =ft_atoi(argv[1]);
-	pthread_mutex_t fork_locks[a];/* = PTHREAD_MUTEX_INITIALIZER; */	
+	pthread_mutex_t write;
+	pthread_mutex_t fork_locks[a];
+	int is_dead;
+
+	pthread_mutex_init(&write, NULL);
+	is_dead = 0;
 	while(x<a)
 	{
 		pthread_mutex_init(&fork_locks[x], NULL); 
@@ -91,8 +122,7 @@ int main(int argc, char *argv[])
 	}
 	check_error(argc);
 	t_table table = fill_table(argv);
-	global = fill_philo(&table, fork_locks);
-	//print_function(global);
+	global = fill_philo(&table, fork_locks, &is_dead, &write);
 		x = 0;
 	pthread_t threads[a];
 	while(x<a)
