@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 12:46:45 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/24 14:02:25 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/25 12:41:49 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int ft_precise_sleep(t_philo *philo, int state)
             pthread_mutex_unlock(philo->write);
             return(0);
         }      
-    	usleep(1 * 1500);		 
+    	usleep(100);		 
     } 
     if(*(philo->is_dead) >0)
         return(0);

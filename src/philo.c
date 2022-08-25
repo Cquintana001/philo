@@ -71,7 +71,7 @@ void *philo_state(void *arg)
 			if(*(philo->is_dead) == 0)
 			{	
 				*(philo->is_dead) = 1;
-			 
+			 	 
 				printf("%ld %d has died1\n", get_time(), philo->nbr);
 				printf("philo_is_dead vale : %d\n", *(philo->is_dead));
 			}			 	 
@@ -88,7 +88,7 @@ void *philo_state(void *arg)
 		pthread_mutex_unlock(philo->fork2);
 		  
 		 
-		if(!is_sleeping(philo)|| *(philo->is_dead) >0)
+		if( *(philo->is_dead) >0 || !is_sleeping(philo))
 			return(0);
  
 		printf("%ld %d is thinking\n",get_time(), philo->nbr);
