@@ -50,52 +50,42 @@ void *philo_state(void *arg)
 	 
 	t_philo *philo = (t_philo*) arg;
 	 
-	 if (philo->nbr % 2 == 0)
-		usleep(10);
+	pthread_mutex_lock(philo->write);
+	pthread_mutex_unlock(philo->write);
+	philo->hour_to_die = get_time() + philo->table->time_to_eat;
 	  while(1)
 	 {	 	 
 		while(1)
 		{
-			if(philo->philo_fork ==0 )
-			{
-			pthread_mutex_lock(philo->fork);
-			philo->philo_fork =1;
+			if(philo->philo_fork == 0)
+			{	pthread_mutex_lock(philo->fork);
+				philo->philo_fork =1;
 			 
-			if(*(philo->philo_fork2) == 0)
-			{	pthread_mutex_lock(philo->fork2);
-				*(philo->philo_fork2) = 1;
-				break;
-			}
-			}
+				if(*(philo->philo_fork2) == 0)
+				{	pthread_mutex_lock(philo->fork2);
+					*(philo->philo_fork2) = 1;
+					break;
+				}		 
 			else
 			{	
 				philo->philo_fork =0;
 				pthread_mutex_unlock(philo->fork);
 			}
-			if((get_time()>philo->hour_to_die)|| (*(philo->is_dead) > 0) )
-        	{	
-				if(*(philo->is_dead) == 0)
-				{	
-					*(philo->is_dead) = 1;
- 
+			}
+			if((get_time()>philo->hour_to_die))
+        	{				 	
+					pthread_mutex_lock(philo->write);
 					printf("%ld %d has died1\n", get_time(), philo->nbr);
-					printf("philo_is_dead vale : %d\n", *(philo->is_dead));
-				}			 	 
-				pthread_mutex_unlock(philo->fork);
-				pthread_mutex_unlock(philo->fork2);	 
+					*(philo->is_dead) = 1;
         		return(0);
         	}
 		}
 		 
-		if(*(philo->is_dead) > 0|| !is_eating(philo))
-			return(0);
-	
-  		pthread_mutex_unlock(philo->fork);
-		pthread_mutex_unlock(philo->fork2);
-		  
-		 
-		if( *(philo->is_dead) >0 || !is_sleeping(philo))
-			return(0);
+		is_eating(philo);
+		is_sleeping(philo);
+		pthread_mutex_lock(philo->write);
+		printf("%ld %d is thinking\n", get_time(), philo->nbr);
+		pthread_mutex_unlock(philo->write);
 	 
    
 	}  
@@ -116,10 +106,13 @@ int main(int argc, char *argv[])
 	int a =ft_atoi(argv[1]);
 	pthread_mutex_t write;
 	pthread_mutex_t fork_locks[a];
+ 
 	int is_dead;
 
 	pthread_mutex_init(&write, NULL);
+ 
 	is_dead = 0;
+	 
 	while(x<a)
 	{
 		pthread_mutex_init(&fork_locks[x], NULL); 
@@ -130,22 +123,23 @@ int main(int argc, char *argv[])
 	global = fill_philo(&table, fork_locks, &is_dead, &write);
 		x = 0;
 	pthread_t threads[a];
+	pthread_mutex_lock(&write);
 	while(x<a)
 	{		  	 
 		pthread_create(&threads[x], NULL, &philo_state, global);
-		 
-	 	usleep(100);
+		pthread_detach(threads[x]);
+ 
 		 
 		global++;
 		x++;
 		 
 	}
-	 
-	x = 0;	  
-	while(x<a)
+	 pthread_mutex_unlock(&write);
+ 	  
+	while(is_dead==0)
 	{
-		pthread_join(threads[x], NULL);
-		x++;
+ 
 	}
+ 
 	return (0);
 }

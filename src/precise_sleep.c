@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 12:46:45 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/26 10:50:55 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/28 12:24:06 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,34 +51,39 @@ int ft_precise_sleep(t_philo *philo, int state)
         if(get_time()  > philo->hour_to_die)
         { 
             pthread_mutex_lock(philo->write);
-            *(philo->is_dead) = 1;
             printf("%ld %d has died2\n", get_time(), philo->nbr);
-            ;
+            *(philo->is_dead) = 1;
+          
             return(0);
         }      
-    	 		 
+    	 usleep(100);		 
     } 
-    if(*(philo->is_dead) >0)
-        return(0);
+ 
     return(1);	 
 }
 int is_eating(t_philo *philo)
 {    
     philo->hour_to_die = get_time() + philo->table->time_to_die;
 	philo->eat = philo->eat +1;
-    
+    pthread_mutex_lock(philo->write);
 	printf("%ld %d has taken a fork\n",get_time(), philo->nbr);
     printf("%ld %d is eating\n",get_time(), philo->nbr);
-     
+    pthread_mutex_unlock(philo->write);
     if(ft_precise_sleep(philo, 2))
-        return(1);
+     {  
+        philo->philo_fork =0;
+		*(philo->philo_fork2) = 0;
+        pthread_mutex_unlock(philo->fork);
+		pthread_mutex_unlock(philo->fork2);  
+         return(1);
+     }
     return(0);
 }
 int is_sleeping(t_philo *philo)
 {
-     
+     pthread_mutex_lock(philo->write);
     printf("%ld %d is sleeping\n",get_time(), philo->nbr);
-     
+    pthread_mutex_unlock(philo->write); 
     if(ft_precise_sleep(philo, 1))
         return(1);
     return(0);
