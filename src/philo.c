@@ -52,29 +52,24 @@ void *philo_state(void *arg)
 	 
 	pthread_mutex_lock(philo->write);
 	philo->start_time = get_time();
-	philo->hour_to_die = get_time() + philo->table->time_to_eat;
+	philo->hour_to_die = get_time() + philo->table->time_to_die;
+	
 	pthread_mutex_unlock(philo->write);
 	if(philo->nbr%2 == 1)
-		usleep(philo->table->time_to_eat + 20);
+		usleep((philo->table->time_to_eat - 20)*1000);
 	while(1)
 	{	 	 
 		while(1)
 		{
-			if(philo->philo_fork == 0)
-			{	pthread_mutex_lock(philo->fork);
-				philo->philo_fork =1;
-			 
-				if(*(philo->philo_fork2) == 0)
-				{	pthread_mutex_lock(philo->fork2);
-					*(philo->philo_fork2) = 1;
-					break;
-				}		 
-			else
-			{	
-				philo->philo_fork =0;
-				pthread_mutex_unlock(philo->fork);
-			}
-			}
+			 	pthread_mutex_lock(philo->fork);
+				if((get_time()>philo->hour_to_die))
+        	{				 	
+					pthread_mutex_lock(philo->write);
+					printf("%ld %d has died1\n", get_time() - philo->start_time, philo->nbr);
+					*(philo->is_dead) = 1;
+        		return(0);
+        	}
+				pthread_mutex_lock(philo->fork2);
 			if((get_time()>philo->hour_to_die))
         	{				 	
 					pthread_mutex_lock(philo->write);
@@ -82,6 +77,11 @@ void *philo_state(void *arg)
 					*(philo->is_dead) = 1;
         		return(0);
         	}
+					
+				break;
+			 	 
+			 
+		 
 		}
 		is_eating(philo);
 		is_sleeping(philo);
