@@ -55,34 +55,31 @@ void *philo_state(void *arg)
 	philo->hour_to_die = get_time() + philo->table->time_to_die;
 	
 	pthread_mutex_unlock(philo->write);
-	if(philo->nbr%2 == 1)
-		usleep((philo->table->time_to_eat - 20)*1000);
+	 if(philo->nbr%2==1)
+		usleep((philo->table->time_to_eat-20) * 1000); 
 	while(1)
 	{	 	 
-		while(1)
-		{
-			 	pthread_mutex_lock(philo->fork);
-				if((get_time()>philo->hour_to_die))
-        	{				 	
-					pthread_mutex_lock(philo->write);
-					printf("%ld %d has died1\n", get_time() - philo->start_time, philo->nbr);
-					*(philo->is_dead) = 1;
-        		return(0);
-        	}
-				pthread_mutex_lock(philo->fork2);
+		 
+			pthread_mutex_lock(philo->fork);
 			if((get_time()>philo->hour_to_die))
         	{				 	
 					pthread_mutex_lock(philo->write);
 					printf("%ld %d has died1\n", get_time() - philo->start_time, philo->nbr);
 					*(philo->is_dead) = 1;
+					pthread_mutex_unlock(philo->fork);
+					 
         		return(0);
         	}
-					
-				break;
-			 	 
-			 
-		 
-		}
+			pthread_mutex_lock(philo->fork2);
+			if((get_time()>philo->hour_to_die))
+        	{				 	
+					pthread_mutex_lock(philo->write);
+					printf("%ld %d has died3\n", get_time() - philo->start_time, philo->nbr);
+					*(philo->is_dead) = 1;
+					pthread_mutex_unlock(philo->fork);
+					pthread_mutex_unlock(philo->fork2);
+        		return(0);
+        	} 
 		is_eating(philo);
 		is_sleeping(philo);
 		pthread_mutex_lock(philo->write);
@@ -106,9 +103,12 @@ int main(int argc, char *argv[])
 	int a =ft_atoi(argv[1]);
 	pthread_mutex_t write;
 	pthread_mutex_t fork_locks[a];
- 
+ t_philo *aux;
 	int is_dead;
-
+	check_error(argc);
+	t_table table = fill_table(argv);
+	global = fill_philo(&table, fork_locks, &is_dead, &write);
+	aux = global;
 	pthread_mutex_init(&write, NULL);
  
 	is_dead = 0;
@@ -118,9 +118,7 @@ int main(int argc, char *argv[])
 		pthread_mutex_init(&fork_locks[x], NULL); 
 		x++;
 	}
-	check_error(argc);
-	t_table table = fill_table(argv);
-	global = fill_philo(&table, fork_locks, &is_dead, &write);
+	 
 		x = 0;
 	pthread_t threads[a];
 	pthread_mutex_lock(&write);
@@ -135,10 +133,20 @@ int main(int argc, char *argv[])
 		 
 	}
 	pthread_mutex_unlock(&write);
- 	  
-	while(is_dead==0)
+ 	  x = 0;
+	while(1)
 	{
- 
+		x = 0;
+		while(x<a)
+		{
+			if(aux[x].hour_to_die < get_time())
+			{	
+				pthread_mutex_lock(&write);
+				printf("philo %d ha muerto a las %ld\n", aux[x].nbr, get_time() - aux[x].start_time);
+				return(0);
+			}
+			x++;
+		}	
 	}
  
 	return (0);
