@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 11:51:34 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/24 12:02:15 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/29 07:44:17 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ typedef struct s_philo{
 	
 	int *is_dead;
 	int nbr;
-	long hour_to_die;	 
+	long hour_to_die;
+	long start_time;	 
 	int eat;
 	int philo_fork;
 	int *philo_fork2;

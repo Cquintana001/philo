@@ -51,10 +51,13 @@ void *philo_state(void *arg)
 	t_philo *philo = (t_philo*) arg;
 	 
 	pthread_mutex_lock(philo->write);
-	pthread_mutex_unlock(philo->write);
+	philo->start_time = get_time();
 	philo->hour_to_die = get_time() + philo->table->time_to_eat;
-	  while(1)
-	 {	 	 
+	pthread_mutex_unlock(philo->write);
+	if(philo->nbr%2 == 1)
+		usleep(philo->table->time_to_eat + 20);
+	while(1)
+	{	 	 
 		while(1)
 		{
 			if(philo->philo_fork == 0)
@@ -75,19 +78,16 @@ void *philo_state(void *arg)
 			if((get_time()>philo->hour_to_die))
         	{				 	
 					pthread_mutex_lock(philo->write);
-					printf("%ld %d has died1\n", get_time(), philo->nbr);
+					printf("%ld %d has died1\n", get_time() - philo->start_time, philo->nbr);
 					*(philo->is_dead) = 1;
         		return(0);
         	}
 		}
-		 
 		is_eating(philo);
 		is_sleeping(philo);
 		pthread_mutex_lock(philo->write);
-		printf("%ld %d is thinking\n", get_time(), philo->nbr);
+		printf("%ld %d is thinking\n", get_time() - philo->start_time, philo->nbr);
 		pthread_mutex_unlock(philo->write);
-	 
-   
 	}  
 	 
 }
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 		x++;
 		 
 	}
-	 pthread_mutex_unlock(&write);
+	pthread_mutex_unlock(&write);
  	  
 	while(is_dead==0)
 	{
