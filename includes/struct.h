@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 11:51:34 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/29 14:58:11 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/30 10:07:08 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,14 @@ typedef struct s_table{
 	int time_to_sleep;
 	int eat_limit;	
 }t_table;
+
 typedef struct s_philo{
-	
-	int *is_dead;
+
 	int nbr;
 	long last_meal;
 	long hour_to_die;
-	long start_time;	 
+	long start;	 
 	int eat;
-	int philo_fork;
-	int *philo_fork2;
 	t_table *table;
 	pthread_mutex_t *write;
 	pthread_mutex_t *fork;

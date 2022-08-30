@@ -6,8 +6,8 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 10:33:44 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/21 13:25:08 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/30 10:38:59 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int find_min(t_philo *philosophers, int limit);
+int find_min(t_philo *philosophers);
