@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 09:18:20 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/30 11:39:41 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/30 17:47:14 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,21 @@
 #include <unistd.h>
 #include "find_min.h"
 
+/* void print_eat(t_philo *philo)
+{
+	sleep(0.5);
+	pthread_mutex_lock(philo->write);
+	int x;
+
+	x = 0;
+	while(x<philo->table->nbr_of_philos)
+	{
+		printf("philo %d ha comido %d veces.\n", philo[x].nbr, philo[x].eat);
+		x++;
+	}
+	
+} */
+
 int	ft_thread_checker(t_philo *aux, pthread_mutex_t *write)
 {
 	int		x;
@@ -34,7 +49,11 @@ int	ft_thread_checker(t_philo *aux, pthread_mutex_t *write)
 		while (x < aux->table->nbr_of_philos)
 		{
 			if(min->table->eat_limit>0 && !find_min(min))		 
+			{
+				
+				//print_eat(aux);	
 				return(0);
+			}
 			if (aux[x].hour_to_die < get_time())
 			{
 				pthread_mutex_lock(write);

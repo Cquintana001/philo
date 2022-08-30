@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 09:34:26 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/30 11:33:10 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/30 17:46:51 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,27 @@ int find_min(t_philo *philosophers)
 	t_philo *aux;
 
 	aux = philosophers;
-	x = 1;
+	x = 0;
 	min = 0;
-	 
-	while(x<aux->table->nbr_of_philos)
+ 
+	while(x<(aux->table->nbr_of_philos-1))
 	{
-		if(aux->eat < ++aux->eat)
+		if(aux[x].eat < aux[x+1].eat)
 			min =aux->eat;
-		aux++;
+ 
 		x++;
 	}
-	pthread_mutex_lock(philosophers->write);
-	printf("el primer min es %d\n", min); 	
-	pthread_mutex_unlock(philosophers->write); 
-	if(min>=philosophers->table->eat_limit)	 
-	{	
-	 
+	if(min>=philosophers->table->eat_limit)	
+	{ 	pthread_mutex_lock(philosophers->write);
+		x = 0;
+		while(x<philosophers->table->nbr_of_philos)
+		{
+			printf("philo %d ha comido %d veces.\n", philosophers[x].nbr, philosophers[x].eat);
+			x++;
+		} 
 		return(0);
-
 	}
+
 	else
 		return(1);
 } 
