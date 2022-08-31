@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 09:18:20 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/31 07:58:29 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/31 10:00:36 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,13 @@
 #include <unistd.h>
 #include "find_min.h"
 
+
+void one_philo()
+{
+	while(1)
+	{}
+	
+}
 int	ft_thread_checker(t_philo *aux, pthread_mutex_t *write)
 {
 	int		x;
@@ -39,7 +46,7 @@ int	ft_thread_checker(t_philo *aux, pthread_mutex_t *write)
 			{
 				pthread_mutex_lock(write);
 				time = get_time() - aux[x].start;
-				printf("%ld %d died\n", time, aux[x].nbr);
+				printf("%ld %d died\n", time, aux[x].nbr + 1);
 				return (0);
 			}
 			x++;
@@ -62,12 +69,17 @@ void	*philo_state(void *arg)
 	while (1)
 	{	
 		pthread_mutex_lock(philo->fork);
+		pthread_mutex_lock(philo->write);
+		printf("%ld %d has taken a fork\n", get_time() - philo->start, philo->nbr + 1);
+		pthread_mutex_unlock(philo->write);
+		if(philo->fork2==NULL)
+			one_philo();
 		pthread_mutex_lock(philo->fork2);
 		is_eating(philo);
 		is_sleeping(philo);
-		pthread_mutex_lock(philo->write);
 		time = get_time() - philo->start;
-		printf("%ld %d is thinking\n", time, philo->nbr);
+		pthread_mutex_lock(philo->write);
+		printf("%ld %d is thinking\n", time, philo->nbr + 1);
 		pthread_mutex_unlock(philo->write);
 	}
 }
@@ -105,5 +117,8 @@ int	main(int argc, char *argv[])
 	init(ft_atoi(argv[1]), global, threads, f);
 	pthread_mutex_unlock(&write);
 	ft_thread_checker(global, &write);
+	free(threads);
+	free(f);
+	free(global);
 	return (0);
 }

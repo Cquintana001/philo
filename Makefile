@@ -3,7 +3,7 @@ NAME				=	philo
 libft				= 	libft
 INC_DIR				= 	./includes/
 CC 					= 	gcc
-CFLAGS 				= 	-Wall -Werror -Wextra  
+CFLAGS 				= 	-Wall -Werror -Wextra -g 
 SRC_DIR				=	src
 SOURCES				=	$(SRC_DIR)/precise_sleep.c \
 						$(SRC_DIR)/philo.c \
