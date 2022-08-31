@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 09:18:20 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/30 17:47:14 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/31 07:58:29 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,39 +21,20 @@
 #include <unistd.h>
 #include "find_min.h"
 
-/* void print_eat(t_philo *philo)
-{
-	sleep(0.5);
-	pthread_mutex_lock(philo->write);
-	int x;
-
-	x = 0;
-	while(x<philo->table->nbr_of_philos)
-	{
-		printf("philo %d ha comido %d veces.\n", philo[x].nbr, philo[x].eat);
-		x++;
-	}
-	
-} */
-
 int	ft_thread_checker(t_philo *aux, pthread_mutex_t *write)
 {
 	int		x;
 	long	time;
-	t_philo *min;
+	t_philo	*min;
 
-	min =aux;
+	min = aux;
 	while (1)
 	{
 		x = 0;
 		while (x < aux->table->nbr_of_philos)
 		{
-			if(min->table->eat_limit>0 && !find_min(min))		 
-			{
-				
-				//print_eat(aux);	
-				return(0);
-			}
+			if (min->table->eat_limit > 0 && !find_min(min))
+				return (0);
 			if (aux[x].hour_to_die < get_time())
 			{
 				pthread_mutex_lock(write);
@@ -61,11 +42,8 @@ int	ft_thread_checker(t_philo *aux, pthread_mutex_t *write)
 				printf("%ld %d died\n", time, aux[x].nbr);
 				return (0);
 			}
- 
 			x++;
 		}
-		/* if(min->table->eat_limit>0 && !find_min(min))		 
-				return(0); */
 	}
 }
 
@@ -82,7 +60,7 @@ void	*philo_state(void *arg)
 	if (philo->nbr % 2 == 1)
 		usleep((philo->table->time_to_eat - 20) * 1000);
 	while (1)
-	{
+	{	
 		pthread_mutex_lock(philo->fork);
 		pthread_mutex_lock(philo->fork2);
 		is_eating(philo);
