@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 09:18:20 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/31 10:00:36 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/31 10:11:38 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,6 @@
 #include <unistd.h>
 #include "find_min.h"
 
-
-void one_philo()
-{
-	while(1)
-	{}
-	
-}
 int	ft_thread_checker(t_philo *aux, pthread_mutex_t *write)
 {
 	int		x;
@@ -69,10 +62,8 @@ void	*philo_state(void *arg)
 	while (1)
 	{	
 		pthread_mutex_lock(philo->fork);
-		pthread_mutex_lock(philo->write);
-		printf("%ld %d has taken a fork\n", get_time() - philo->start, philo->nbr + 1);
-		pthread_mutex_unlock(philo->write);
-		if(philo->fork2==NULL)
+		print_forks(philo);
+		if (philo->fork2 == NULL)
 			one_philo();
 		pthread_mutex_lock(philo->fork2);
 		is_eating(philo);

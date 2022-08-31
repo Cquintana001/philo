@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/13 12:46:45 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/31 09:31:19 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/31 10:12:02 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,11 @@ int	ft_precise_sleep(t_philo *philo, int state)
 
 int	is_eating(t_philo *philo)
 {
+	long	time;
+
+	time = get_time() - philo->start;
 	pthread_mutex_lock(philo->write);
-	printf("%ld %d has taken a fork\n", get_time() - philo->start, philo->nbr + 1);
+	printf("%ld %d has taken a fork\n", time, philo->nbr + 1);
 	printf("%ld %d is eating\n", get_time() - philo->start, philo->nbr + 1);
 	philo->hour_to_die = get_time() + philo->table->time_to_die;
 	philo->eat = philo->eat + 1;
