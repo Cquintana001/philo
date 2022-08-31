@@ -1,6 +1,5 @@
 NAME				=	philo
 
-libft				= 	libft
 INC_DIR				= 	./includes/
 CC 					= 	gcc
 CFLAGS 				= 	-Wall -Werror -Wextra -g 
@@ -16,8 +15,7 @@ OBJS				= 	$(SOURCES:.c=.o)
  
 
 $(NAME): $(OBJS)
-	make -C $(libft)
-	$(CC) $(CFLAGS) $(OBJS) $(libft)/libft.a -o $(NAME) 
+	$(CC) $(CFLAGS) $(OBJS)  -o $(NAME) 
 
 $(SRC_DIR)/%.o : $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ -I $(INC_DIR)
@@ -25,7 +23,7 @@ $(SRC_DIR)/%.o : $(SRC_DIR)/%.c
 all: $(NAME)
 
 fclean : clean
-	make fclean -C $(libft)
+
 clean:
 	rm -f $(OBJS) $(NAME) 
 

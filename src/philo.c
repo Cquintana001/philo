@@ -6,14 +6,13 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 09:18:20 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/31 10:11:38 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/31 10:44:42 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "precise_sleep.h"
 #include "struct.h"
 #include "check_error.h"
-#include "../libft/libft.h"
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>

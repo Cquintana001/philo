@@ -6,17 +6,17 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 14:59:42 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/31 09:30:20 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/31 10:50:43 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "struct.h"
 #include "fill_data.h"
 #include <stdlib.h>
-#include "../libft/libft.h"
 #include "precise_sleep.h"
 #include <pthread.h>
 #include <stdio.h>
+#include "check_error.h"
 
 t_table	fill_table(char *args[])
 {

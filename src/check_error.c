@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 12:13:55 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/31 10:16:47 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/08/31 10:43:19 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,26 @@ void	print_forks(t_philo *philo)
 	pthread_mutex_lock(philo->write);
 	printf("%ld %d has taken a fork\n", time, philo->nbr + 1);
 	pthread_mutex_unlock(philo->write);
+}
+
+int	ft_atoi(const char *nptr)
+{
+	int	sum;
+	int	sign;
+
+	sum = 0;
+	sign = 1;
+	while (*nptr == ' ' || *nptr == '\t' || *nptr == '\n' \
+		|| *nptr == '\f' || *nptr == '\r' || *nptr == '\v')
+		nptr++;
+	if (*nptr == '-')
+		sign = -1;
+	if (*nptr == '-' || *nptr == '+')
+		nptr++;
+	while (*nptr >= '0' && *nptr <= '9')
+	{
+		sum = sum * 10 + *nptr - '0';
+		nptr++;
+	}
+	return (sum * sign);
 }
