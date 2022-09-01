@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 09:18:20 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/31 10:44:42 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/09/01 12:22:32 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	ft_thread_checker(t_philo *aux, pthread_mutex_t *write)
 	t_philo	*min;
 
 	min = aux;
+	 
 	while (1)
 	{
 		x = 0;
@@ -37,6 +38,7 @@ int	ft_thread_checker(t_philo *aux, pthread_mutex_t *write)
 			if (aux[x].hour_to_die < get_time())
 			{
 				pthread_mutex_lock(write);
+				 
 				time = get_time() - aux[x].start;
 				printf("%ld %d died\n", time, aux[x].nbr + 1);
 				return (0);
@@ -99,7 +101,8 @@ int	main(int argc, char *argv[])
 
 	f = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * ft_atoi(argv[1]));
 	threads = (pthread_t *)malloc(sizeof(pthread_t) * ft_atoi(argv[1]));
-	check_error(argc);
+	if (!check_error(argc, argv))
+		return (0);
 	table = fill_table(argv);
 	global = fill_philo(&table, f, &write);
 	pthread_mutex_init(&write, NULL);

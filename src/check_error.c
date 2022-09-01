@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 12:13:55 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/31 10:43:19 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/09/01 12:10:37 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,28 @@
 #include "struct.h"
 #include "precise_sleep.h"
 
-void	check_error(int argc)
+int	check_error(int argc, char *argv[])
 {
+	int	x;
+
+	x = 1;
 	if (argc < 5 || argc > 6)
 	{
 		printf("Número de argumentos incorrecto.\n");
-		exit(1);
-	}	
+		return (0);
+	}
+	while (x < 5)
+	{
+		if (ft_atoi(argv[x]) < 0)
+		{
+			printf("Número negativo en algún argumento.\n");
+			return (0);
+		}
+		x++;
+	}
+	if ( argv[5] && ft_atoi(argv[5]) < 0)
+		return (0);
+	return (1);
 }
 
 void	one_philo(void)
@@ -48,7 +63,7 @@ int	ft_atoi(const char *nptr)
 
 	sum = 0;
 	sign = 1;
-	while (*nptr == ' ' || *nptr == '\t' || *nptr == '\n' \
+	while (*nptr == ' ' || *nptr == '\t' || *nptr == '\n'
 		|| *nptr == '\f' || *nptr == '\r' || *nptr == '\v')
 		nptr++;
 	if (*nptr == '-')

@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 12:14:25 by caquinta          #+#    #+#             */
-/*   Updated: 2022/08/31 11:00:51 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/09/01 11:58:24 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "struct.h"
 
-void	check_error(int argc);
+int		check_error(int argc, char*argv[]);
 void	print_forks(t_philo *philo);
 void	one_philo(void);
 int		ft_atoi(const char *nptr);
