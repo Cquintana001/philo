@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 12:13:55 by caquinta          #+#    #+#             */
-/*   Updated: 2022/09/01 12:10:37 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/09/02 07:30:21 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	check_error(int argc, char *argv[])
 		}
 		x++;
 	}
-	if ( argv[5] && ft_atoi(argv[5]) < 0)
+	if (argv[5] && ft_atoi(argv[5]) < 0)
 		return (0);
 	return (1);
 }

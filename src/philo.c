@@ -6,7 +6,7 @@
 /*   By: caquinta <caquinta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 09:18:20 by caquinta          #+#    #+#             */
-/*   Updated: 2022/09/01 12:22:32 by caquinta         ###   ########.fr       */
+/*   Updated: 2022/09/02 07:31:08 by caquinta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	ft_thread_checker(t_philo *aux, pthread_mutex_t *write)
 	t_philo	*min;
 
 	min = aux;
-	 
 	while (1)
 	{
 		x = 0;
@@ -38,7 +37,6 @@ int	ft_thread_checker(t_philo *aux, pthread_mutex_t *write)
 			if (aux[x].hour_to_die < get_time())
 			{
 				pthread_mutex_lock(write);
-				 
 				time = get_time() - aux[x].start;
 				printf("%ld %d died\n", time, aux[x].nbr + 1);
 				return (0);
